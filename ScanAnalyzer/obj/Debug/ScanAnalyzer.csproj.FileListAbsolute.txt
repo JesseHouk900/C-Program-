@@ -1,0 +1,10 @@
+C:\Users\vasudev2296\source\repos\ScanAnalyzer\ScanAnalyzer\bin\Debug\ScanAnalyzer.exe.config
+C:\Users\vasudev2296\source\repos\ScanAnalyzer\ScanAnalyzer\bin\Debug\ScanAnalyzer.exe
+C:\Users\vasudev2296\source\repos\ScanAnalyzer\ScanAnalyzer\bin\Debug\ScanAnalyzer.pdb
+C:\Users\vasudev2296\source\repos\ScanAnalyzer\ScanAnalyzer\obj\Debug\ScanAnalyzer.csprojResolveAssemblyReference.cache
+C:\Users\vasudev2296\source\repos\ScanAnalyzer\ScanAnalyzer\obj\Debug\ScanAnalyzer.Properties.Resources.resources
+C:\Users\vasudev2296\source\repos\ScanAnalyzer\ScanAnalyzer\obj\Debug\ScanAnalyzer.csproj.GenerateResource.Cache
+C:\Users\vasudev2296\source\repos\ScanAnalyzer\ScanAnalyzer\obj\Debug\ScanAnalyzer.csproj.CoreCompileInputs.cache
+C:\Users\vasudev2296\source\repos\ScanAnalyzer\ScanAnalyzer\obj\Debug\ScanAnalyzer.exe
+C:\Users\vasudev2296\source\repos\ScanAnalyzer\ScanAnalyzer\obj\Debug\ScanAnalyzer.pdb
+C:\Users\vasudev2296\source\repos\ScanAnalyzer\ScanAnalyzer\obj\Debug\ScanAnalyzer.FindSampleGame.resources
