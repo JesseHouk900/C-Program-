@@ -18,6 +18,7 @@ namespace ScanAnalyzer
 {
     public class ScanAnalyzer
     {
+        // could also be a 2D array of chars
         private string[,] grid; // Array to hold the grid size
         private int[] sample1; // Array to hold the first sample
         private int[] sample2;  // Array to hold the second sample
@@ -37,8 +38,9 @@ namespace ScanAnalyzer
         }
 
         // parameterized constructed taking in rows, columns and form as parameters
-            public ScanAnalyzer(int a, int b, FindSampleGame form) 
-            {
+        public ScanAnalyzer(int a, int b, FindSampleGame form)
+        {
+            // should use SetGrid(a, b);
             rows = a;
             columns = b;
 
@@ -47,14 +49,18 @@ namespace ScanAnalyzer
 
             sample1[0] = rand.Next(0, a); // random integer for sample 1 = row
             sample1[1] = rand.Next(0, b); // random integer for sample 1 = row
-            sample2[0] = rand.Next(0, a); // random integer for sample 2 = row
-            sample2[1] = rand.Next(0, b); // random integer for sample 2 = column
+            // prevent sample 2 from being the same point as sample1
+            do
+            {
+                sample2[0] = rand.Next(0, a); // random integer for sample 2 = row
+                sample2[1] = rand.Next(0, b); // random integer for sample 2 = column
+            } while (sample2[0] == sample1[0] && sample2[1] == sample1[1]);
             guessCounter = 0; // Initializing the guess counter to 0
 
-              grid = new string[a, b]; // Initializng the array named grid
-                ResetGrid();    // Resets the  array back 
-                this.form = form; // Playing the game of a form which is set here
-                form.AppearGrid = DisplayGrid(); // // Displays the matrix in the textbox
+            grid = new string[a, b]; // Initializng the array named grid
+            ResetGrid();    // Resets the  array back 
+            this.form = form; // Playing the game of a form which is set here
+            form.AppearGrid = DisplayGrid(); // // Displays the matrix in the textbox
         }
 
         public String DisplayGrid()
@@ -63,7 +69,7 @@ namespace ScanAnalyzer
             int rw = 0, clmn = 0; // row and column initialized to 0
             for (int i = 0; i < columns; i++) // printing the grid using a for-loop
                 matrixDisplay = matrixDisplay + i; // Concatening for displaying 
-                matrixDisplay += Environment.NewLine; // New line
+            matrixDisplay += Environment.NewLine; // New line
 
             for (rw = 0; rw < rows; rw++) // For-loop to traverse through the element in the array
             {
@@ -79,7 +85,7 @@ namespace ScanAnalyzer
 
             }
             return matrixDisplay; // Returns the grid back 
-           
+
         }
 
         /*This function is to reset grid everytime after the game is completed.
@@ -90,16 +96,21 @@ namespace ScanAnalyzer
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
-                    grid[i, j] = "~";
+                {
+                    if (grid[i, j] != "X")
+                    {
+                        grid[i, j] = "~";
+                    }
+                }
             }
         }
 
         /* This method checks if row value and column value are greater than 0.
          * It takes rowValue and columnValue as parameters and returns void */
-      
-        public void SetGrid(int rowValue, int columnValue) 
+
+        public void SetGrid(int rowValue, int columnValue)
         {
-            rows = (rowValue > 0) ? rowValue : 0; 
+            rows = (rowValue > 0) ? rowValue : 0;
             columns = (columnValue > 0) ? columnValue : 0;
         }
 
@@ -139,15 +150,16 @@ namespace ScanAnalyzer
             else
             {
                 if (userSample[0] == a)
-                    checkColumn(a, b, userSample[0]); // To check if it is the right column
+                    checkColumn(a, b, userSample[1]); // To check if it is the right column
 
                 else
                 {
                     if (userSample[1] == b)
-                        checkRow(a, b, userSample[1]); // To check if it is the right row 
+                        checkRow(a, b, userSample[0]); // To check if it is the right row 
                     else
                     {
-                        if (assign == "Xmark") // checks to see if there is an X in the grid
+                        // from what I can tell, this if statement will never be true
+                        if (assign == "down") // checks to see if there is an X in the grid
                             checkColumn(a, b, userSample[1]); //
                         else
                             checkRow(a, b, userSample[0]);
@@ -171,7 +183,7 @@ namespace ScanAnalyzer
                 grid[rows, columns] = "^";
             else
             {
-            if (rows < userSample)
+                if (rows < userSample)
                     grid[rows, columns] = "v";
             }
         }
@@ -181,18 +193,18 @@ namespace ScanAnalyzer
          * userSample as parameter */
 
         public void checkColumn(int rows, int columns, int userSample)
-            {
-                if (columns > userSample) // if it is to the left side of the column
-                  grid[rows, columns] = "<"; // goes to that grid and prints < sign
+        {
+            if (columns > userSample) // if it is to the left side of the column
+                grid[rows, columns] = "<"; // goes to that grid and prints < sign
 
-                else
-                {
-                    if (columns < userSample) // if it is right hand side of the column
-                        grid[rows, columns] = ">"; // goes to that grid and prints > sign
+            else
+            {
+                if (columns < userSample) // if it is right hand side of the column
+                    grid[rows, columns] = ">"; // goes to that grid and prints > sign
             }
-            }
- 
-       
+        }
+
+
     }
 }
 
@@ -202,6 +214,6 @@ namespace ScanAnalyzer
 
 
 
-       
 
-      
+
+
