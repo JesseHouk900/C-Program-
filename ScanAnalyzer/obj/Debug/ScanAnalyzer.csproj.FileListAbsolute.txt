@@ -18,3 +18,5 @@ C:\Users\jesse\Documents\CS\repos\C-Program-\ScanAnalyzer\obj\Debug\ScanAnalyzer
 C:\Users\jesse\Documents\CS\repos\C-Program-\ScanAnalyzer\obj\Debug\ScanAnalyzer.csproj.CoreCompileInputs.cache
 C:\Users\jesse\Documents\CS\repos\C-Program-\ScanAnalyzer\obj\Debug\ScanAnalyzer.exe
 C:\Users\jesse\Documents\CS\repos\C-Program-\ScanAnalyzer\obj\Debug\ScanAnalyzer.pdb
+C:\Users\Alex\Documents\Jesse\CS\C-Program-\ScanAnalyzer\obj\Debug\ScanAnalyzer.exe
+C:\Users\Alex\Documents\Jesse\CS\C-Program-\ScanAnalyzer\obj\Debug\ScanAnalyzer.pdb
