@@ -35,44 +35,60 @@ namespace ScanAnalyzer
         // Default constructor
         public ScanAnalyzer()
         {
-
             //int[,] grid = new int[rows, columns]; // 2d array to hold rows and column size entered by the user
-            SetGrid(0, 0);
+            SetGrid(10, 10);
+            imageName = "GridSquare.jpg";
+            samples = new Point[1];
+
+            samples[0].Row = rand.Next(0, 10); // random integer for sample 1 = row
+            samples[0].Column = rand.Next(0, 10); // random integer for sample 1 = column
+
+            guessCounter = 0; // Initializing the guess counter to 0
+
+            //grid = new string[a, b]; // Initializng the array named grid
+            ResetGrid();    // Resets the  array back 
+            //this.form = form; // Playing the game of a form which is set here
+
+            DisplayPictureBoxes();
         }
-        // ********** NEEDS ATTENTION: what kind of interaction is happening between the hub
-            // and the analyzers? ***********
-        // parameterized constructed taking in rows, columns and form as parameters
+
+        // parameterized constructed taking in rows, columns, locations of the previously generated secret
+        // evidence locations, and the name of the evidence image, ending in a .png preferably //and form as parameters
         public ScanAnalyzer(int a, int b, Point[] sampleLocations, string nameOfImage/*, FindSampleGame form*/)
         {
             SetGrid(a, b); // set the size of the grid
             imageName = nameOfImage;
             //sample1 = new int[2]; // Sample 1 holds the random location of the first item
             //sample2 = new int[2]; // Sample 2 holds the random location of the first item
-            samples = new Point[sampleLocations.Length];
-            if (samples.Length != 0)
-            {
-                bool repeat;
-                samples[0].Row = rand.Next(0, a); // random integer for sample 1 = row
-                samples[0].Column = rand.Next(0, b); // random integer for sample 1 = column
+            samples = sampleLocations;
+            //samples = new Point[sampleLocations.Length];
+            //if (samples.Length != 0)
+            //{
+                //// *************** Move to where new locations are made ******************
+                ////bool repeat;
+                ////samples[0].Row = rand.Next(0, a); // random integer for sample 1 = row
+                ////samples[0].Column = rand.Next(0, b); // random integer for sample 1 = column
                 // prevent any other samples from being the same point as sample 1
-                for (int i = 1; i < sampleLocations.Length; i++)
-                {
-                    do
-                    {
-                        repeat = false;
-                        samples[i].Row = rand.Next(0, a); // random integer for sample i = row
-                        samples[i].Column = rand.Next(0, b); // random integer for sample i = column
-                        for (int j = 0; j < i; j++)
-                        {
-                            // check previous sample j locations against sample i
-                            if (samples[i].Row == samples[j].Row && samples[i].Column == samples[j].Column)
-                            {
-                                repeat = true;
-                            }
-                        }
-                    } while (repeat);
-                }
-            }
+                //for (int i = 0; i < sampleLocations.Length; i++)
+                //{
+                    //samples[i] = sampleLocations[i];
+                //    // *************** Move to where new locations are made ******************
+                //    //do
+                //    //{
+                //    //    repeat = false;
+                //    //    samples[i].Row = rand.Next(0, a); // random integer for sample i = row
+                //    //    samples[i].Column = rand.Next(0, b); // random integer for sample i = column
+                //    //    for (int j = 0; j < i; j++)
+                //    //    {
+                //    //        // check previous sample j locations against sample i
+                //    //        if (samples[i].Row == samples[j].Row && samples[i].Column == samples[j].Column)
+                //    //        {
+                //    //            repeat = true;
+                //    //        }
+                //    //    }
+                //    //} while (repeat);
+                //}
+            //}
             guessCounter = 0; // Initializing the guess counter to 0
 
             //grid = new string[a, b]; // Initializng the array named grid
@@ -113,6 +129,7 @@ namespace ScanAnalyzer
 
         public void ResetGrid()
         {
+            // displayPanel.Clear();
             for (int r = 0; r < rows; r++)
             {
                 //pictureGrid[r] = new PictureBox[columns];
@@ -148,26 +165,25 @@ namespace ScanAnalyzer
         }
 
         /* This method checks if the user's guess is right or wrong, if it
-         * is wrong, it prints back the hint. It takes in rowsm columns, guess and assign as parameters
-         * and returns a bool value */
+         * is wrong, it is handled differently depending on how the derived class implements the
+         * IncorrectGuess method. It takes in:
+         * a - rows,
+         * b - columns,
+         * guess - how many clues have been found so far,
+         * info - any additional information associated with the guess, such as
+         *          a direction for the next hint
+         * Returns:
+         * bool - whether the user made a correct guess or not 
+         */
 
-        public bool EvaluateGuess(int a, int b, int guess, string assign)
+        public bool EvaluateGuess(int a, int b, int guess, string info)
         {
-            int[] userSample = new int[2]; // Initializng user the sample Array
-            if (guess == 0)
+            // sample the user is trying to find
+            Point userSample = new Point(samples[guess].Row, samples[guess].Column, samples[guess].ImageName); // Initializng user the sample Array
+            
+            if (userSample.Row == a && userSample.Column == b) // checks to see if the user the found correct row and column sample
             {
-                userSample[0] = sample1[0]; // Sample array 1 assigned to the user's sample
-                userSample[1] = sample1[1];
-            }
-            else
-            {
-                userSample[0] = sample2[0]; // / Sample array 2 assigned to the user's sample
-                userSample[1] = sample2[1];
-            }
-
-            if (userSample[0] == a && userSample[1] == b) // checks to see if the user the found correct row and column sample
-            {
-                grid[a, b] = "X"; // Prints an X in the correct location
+                pictureGrid[a][b].ImageName = imageName; // Prints the appropriate image in the correct location
                 DisplayPictureBoxes();
                 //form.AppearGrid = DisplayGrid(); // Displays the X to the grid
                 ResetGrid(); // Resets the grid 
@@ -175,21 +191,24 @@ namespace ScanAnalyzer
             }
             else
             {
-                if (userSample[0] == a)
-                    checkColumn(a, b, userSample[0]); // To check if it is the right column
+                IncorrectGuess(info);
+                // ********************** Only put in IncorrectGuess method of analyzer that wants
+                // to provide hints when user guesses wrong ********************
+                //if (userSample.Row == a)
+                //    checkColumn(a, b, userSample.Row); // To check if it is the right column
 
-                else
-                {
-                    if (userSample[1] == b)
-                        checkRow(a, b, userSample[1]); // To check if it is the right row 
-                    else
-                    {
-                        if (assign == "down") // checks to see if there is an X in the grid
-                            checkColumn(a, b, userSample[1]); //
-                        else
-                            checkRow(a, b, userSample[0]);
-                    }
-                }
+                //else
+                //{
+                //    if (userSample.Column == b)
+                //        checkRow(a, b, userSample.Column); // To check if it is the right row 
+                //    else
+                //    {
+                //        if (info == "down") // checks to see if there is an X in the grid
+                //            checkColumn(a, b, userSample.Column); //
+                //        else
+                //            checkRow(a, b, userSample.Column);
+                //    }
+                //}
                 DisplayPictureBoxes();
                 //form.AppearGrid = DisplayGrid();
                 return false;
@@ -197,42 +216,43 @@ namespace ScanAnalyzer
 
         }
 
+        // ********************** Only put in analyzer that wants to provide hints 
+        // when user guesses wrong ********************
+        ///* This function checks to see if the user guess is in the right row
+        //* so it knows to print back whether ^ or v sign. It takes rows, column and
+        //* userSample as parameter */
 
+        //public void checkRow(int rows, int columns, int userSample)
+        //{
+        //    if (rows > userSample)
+        //        pictureBox[rows][columns] = "UpHintImage.png";
+        //    else
+        //    {
+        //        if (rows < userSample)
+        //            pictureBox[rows][columns] = "DownHintImage.png";
+        //    }
+        //}
 
-        /* This function checks to see if the user guess is in the right row
-        * so it knows to print back whether ^ or v sign. It takes rows, column and
-        * userSample as parameter */
+        ///* This function checks to see if the user guess is in the right column
+        // * so it knows to print back whether < or > sign. It takes rows, column and
+        // * userSample as parameter */
 
-        public void checkRow(int rows, int columns, int userSample)
-        {
-            if (rows > userSample)
-                grid[rows, columns] = "^";
-            else
-            {
-                if (rows < userSample)
-                    grid[rows, columns] = "v";
-            }
-        }
+        //public void checkColumn(int rows, int columns, int userSample)
+        //{
+        //    if (columns > userSample) // if it is to the left side of the column
+        //        pictureBox[rows][columns] = "RightHintImage.png"; // goes to that grid and prints < sign
 
-        /* This function checks to see if the user guess is in the right column
-         * so it knows to print back whether < or > sign. It takes rows, column and
-         * userSample as parameter */
+        //    else
+        //    {
+        //        if (columns < userSample) // if it is right hand side of the column
+        //            pictureBox[rows][columns] = "LeftHintImage.png"; // goes to that grid and prints > sign
+        //    }
+        //}
 
-        public void checkColumn(int rows, int columns, int userSample)
-        {
-            if (columns > userSample) // if it is to the left side of the column
-                grid[rows, columns] = "<"; // goes to that grid and prints < sign
-
-            else
-            {
-                if (columns < userSample) // if it is right hand side of the column
-                    grid[rows, columns] = ">"; // goes to that grid and prints > sign
-            }
-        }
-
+        // show the new pictureGrid
         public void DisplayPictureBoxes()
         {
-            int x; int y;
+            //int x; int y;
             pictureGrid = new Point[rows][];
             for (int r = 0; r < rows; r++)
             {
@@ -256,6 +276,8 @@ namespace ScanAnalyzer
 
         }
 
+        // initialize a new Point which inherits from PictureBox on the pictureGrid
+        // making the image name easily accessable
         private void CreateImage(int r, int c, string image)
         {
             Point pos = CalculatePosition(r, c);
@@ -270,15 +292,27 @@ namespace ScanAnalyzer
             pictureGrid[r][c].Visible = true;
 
         }
-
+        // allow derived class to override the CalculatePosition method, but 
+        // prevent the method from being called explicitly from any instance.
+        // calculate the position for an element in the pictureGrid
         protected abstract Point CalculatePosition(int r, int c);
-
+        
+        // ChangeImage is used to take a picture box from the grid and change the
+        // image 
         private void ChangeImage(int r, int c, string image)
         {
             pictureGrid[r][c].Image = Image.FromFile(image);
             pictureGrid[r][c].Load(Directory.GetCurrentDirectory() + "\\" + image);
         }
+
+        // allow derived class to override the IncorrectGuess method, but 
+        // prevent the method from being called explicitly from any instance.
+        // Handle the case where the user has made an incorrect guess for the
+        // evidence
+        protected abstract void IncorrectGuess(string info);
+
     }
+
 }
 
 

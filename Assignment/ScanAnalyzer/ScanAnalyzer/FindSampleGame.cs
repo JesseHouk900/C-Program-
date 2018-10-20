@@ -23,6 +23,7 @@ namespace ScanAnalyzer
             //pictureBox1.Image = Image.FromFile("GridSquare.jpg");
             SubGuessButton.Enabled = false; // Guess button disabled after program loads 
             // DisplayPanel.Visible = true; //  Game text box visible 
+            // move to where a button is being clicked
             scan = new ScanAnalyzer(4, 4, Point[] { }, "GridSquare.jpg"/*, this*/); // intantiate the scanner class with this
             scan.DisplayPictureBoxes();
             //foreach (PictureBox[] pb in scan.pictureGrid)

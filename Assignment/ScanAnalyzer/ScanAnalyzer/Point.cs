@@ -15,6 +15,8 @@ namespace ScanAnalyzer
         private int column;
         //
         private string imageName;
+        //
+        private bool isFound;
         // public property that accesses and sets row
         public int Row
         {
@@ -39,6 +41,19 @@ namespace ScanAnalyzer
                 column = value;
             }
         }
+        //
+        public bool Found
+        {
+            get
+            {
+                return isFound;
+            }
+            //// NEEDS ERROR CHECKING
+            set
+            {
+                isFound = value;
+            }
+        }
         public string ImageName
         {
             get
@@ -57,6 +72,7 @@ namespace ScanAnalyzer
             row = r;
             column = c;
             imageName = image;
+            isFound = false;
         }
 
     }
