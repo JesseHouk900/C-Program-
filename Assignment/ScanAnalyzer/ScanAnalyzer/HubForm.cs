@@ -17,6 +17,11 @@ namespace ScanAnalyzer
             InitializeComponent();
         }
 
+        public HubForm(Point[] gridSizes) {
+            InitializeComponent();
+
+        }
+
         private void FingerPrintButton_Click(object sender, EventArgs e)
         {
             int d = ReadDataForm.gridSizes[0].Row;

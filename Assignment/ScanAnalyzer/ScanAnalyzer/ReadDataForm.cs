@@ -14,7 +14,7 @@ namespace ScanAnalyzer
     public partial class ReadDataForm : Form
     {
         string fileName;
-        static Point [] gridSizes;
+        private static Point [] gridSizes;
         public ReadDataForm()
         {
             InitializeComponent();
@@ -26,6 +26,15 @@ namespace ScanAnalyzer
             ReadFile();
             
             SwitchForm();
+        }
+        public static Point[] GridSizes {
+            get 
+            {
+                return gridSizes;
+            }
+            set {
+
+            }
         }
         //Example of code to read a file
         private void ReadFile()
@@ -50,7 +59,7 @@ namespace ScanAnalyzer
 
         private void SwitchForm()
         {
-            HubForm hub = new HubForm();
+            HubForm hub = new HubForm(gridSizes);
             hub.Show();
             this.Hide();
         }

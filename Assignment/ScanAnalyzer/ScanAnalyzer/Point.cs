@@ -16,7 +16,7 @@ namespace ScanAnalyzer
         //
         private string imageName;
         //
-        private bool isFound;
+        private bool? isFound;
         // public property that accesses and sets row
         public int Row
         {
@@ -42,7 +42,7 @@ namespace ScanAnalyzer
             }
         }
         //
-        public bool Found
+        public bool? Found
         {
             get
             {
@@ -66,7 +66,9 @@ namespace ScanAnalyzer
                 imageName = value;
             }
         }
-        // parameterized constructor taking in a desired row and column
+
+        // parameterized constructor taking in a desired row and column and 
+        // constructs a PictureBox
         public Point(int r, int c, string image) : base()
         {
             row = r;
@@ -75,5 +77,14 @@ namespace ScanAnalyzer
             isFound = false;
         }
 
+        // parameterized constructor that only has row and columns set
+        public Point(int r, int c)
+        {
+
+            row = r;
+            column = c;
+            imageName = "";
+            isFound = null;
+        }
     }
 }
